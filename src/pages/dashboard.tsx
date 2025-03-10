@@ -22,10 +22,7 @@ import {
 
 export default function Dashboard() {
   const { user } = useUser();
-  const userData = useQuery(
-    api.users.getUserByToken,
-    user?.id ? { tokenIdentifier: user.id } : "skip",
-  );
+  const userData = useQuery(api.users.getCurrentUser);
 
   // Mock data for dashboard
   const salesData = {

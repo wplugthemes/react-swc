@@ -21,13 +21,10 @@ function LoadingSpinner() {
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { user, isLoaded: isUserLoaded } = useUser();
-  
-  // Only query if user is loaded and exists
-  const userData = useQuery(
-    api.users.getUserByToken,
-    isUserLoaded && user?.id ? { tokenIdentifier: user.id } : "skip"
-  );
-  
+
+  // Query current user from Convex
+  const userData = useQuery(api.users.getCurrentUser);
+
   // Only query subscription if we have user data
   // Step 1: Wait for Clerk to initialize
   if (!isUserLoaded) {

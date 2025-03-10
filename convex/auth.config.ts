@@ -1,8 +1,8 @@
 export default {
-    providers: [
-      {
-        domain: process.env.CLERK_SIGNING_KEY,
-        applicationID: "convex",
-      },
-    ]
-  };
+  providers: [
+    {
+      domain: "clerk.com",
+      applicationID: "clerk.com",
+    },
+  ],
+};

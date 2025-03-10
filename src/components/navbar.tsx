@@ -1,5 +1,10 @@
 import { SignInButton, UserButton, useUser } from "@clerk/clerk-react";
-import { Authenticated, Unauthenticated, useQuery } from "convex/react";
+import {
+  Authenticated,
+  Unauthenticated,
+  useQuery,
+  useConvexAuth,
+} from "convex/react";
 import { Link, useLocation } from "react-router-dom";
 import { api } from "../../convex/_generated/api";
 import { ShoppingCart, Menu, X, Search, Bell } from "lucide-react";
@@ -12,10 +17,8 @@ interface NavbarProps {
 
 export function Navbar({ onMenuClick }: NavbarProps) {
   const { user, isLoaded } = useUser();
-  const userData = useQuery(
-    api.users.getUserByToken,
-    user?.id ? { tokenIdentifier: user.id } : "skip",
-  );
+  const { isAuthenticated } = useConvexAuth();
+  const userData = useQuery(api.users.getCurrentUser);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
 
