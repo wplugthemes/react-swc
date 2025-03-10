@@ -6,25 +6,24 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Search,
+  Plus,
+  Minus,
+  Trash2,
   CreditCard,
   Banknote,
   Tag,
   Percent,
-  Receipt,
-  Save,
 } from "lucide-react";
 import { ProductCard } from "@/components/ui/product-card";
 import { CartItem } from "@/components/ui/cart-item";
 import { PRODUCT_CATEGORIES, PRODUCTS } from "@/lib/data";
 import { CartItem as CartItemType } from "@/lib/types";
-import { useToast } from "@/components/ui/use-toast";
 
-export default function PosPage() {
+export default function MockPosPage() {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [cart, setCart] = useState<CartItemType[]>([]);
   const [paymentMethod, setPaymentMethod] = useState<string>("cash");
-  const { toast } = useToast();
 
   // Filter products based on category and search query
   const filteredProducts = PRODUCTS.filter((product) => {
@@ -47,11 +46,6 @@ export default function PosPage() {
             : item,
         );
       } else {
-        toast({
-          title: "Item added",
-          description: `${product.name} added to cart`,
-          duration: 2000,
-        });
         return [...prevCart, { ...product, quantity: 1 }];
       }
     });
@@ -70,30 +64,7 @@ export default function PosPage() {
 
   // Remove item from cart
   const removeFromCart = (id: string) => {
-    const itemToRemove = cart.find((item) => item.id === id);
-    if (itemToRemove) {
-      toast({
-        title: "Item removed",
-        description: `${itemToRemove.name} removed from cart`,
-        duration: 2000,
-      });
-    }
     setCart((prevCart) => prevCart.filter((item) => item.id !== id));
-  };
-
-  // Process payment
-  const processPayment = () => {
-    if (cart.length === 0) return;
-
-    toast({
-      title: "Payment successful",
-      description: `${total.toFixed(2)} payment processed via ${paymentMethod}`,
-      variant: "success",
-      duration: 3000,
-    });
-
-    // Clear cart after successful payment
-    setCart([]);
   };
 
   // Calculate subtotal
@@ -117,7 +88,7 @@ export default function PosPage() {
           <div className="mb-6 flex flex-col md:flex-row justify-between gap-4">
             <div className="relative w-full md:w-64">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <Search className="w-4 h-4 text-muted-foreground" />
+                <Search className="w-4 h-4 text-gray-500" />
               </div>
               <Input
                 type="text"
@@ -160,15 +131,13 @@ export default function PosPage() {
         {/* Cart Section */}
         <div>
           <Card className="h-full flex flex-col">
-            <div className="p-4 border-b border-border">
-              <h2 className="text-xl font-semibold text-foreground">
-                Current Sale
-              </h2>
+            <div className="p-4 border-b border-gray-100">
+              <h2 className="text-xl font-semibold">Current Sale</h2>
             </div>
 
             <div className="flex-1 overflow-auto p-4">
               {cart.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
+                <div className="text-center py-8 text-gray-500">
                   <p>No items in cart</p>
                   <p className="text-sm mt-2">
                     Click on products to add them to the cart
@@ -192,17 +161,17 @@ export default function PosPage() {
               )}
             </div>
 
-            <div className="p-4 border-t border-border bg-muted/50">
+            <div className="p-4 border-t border-gray-100 bg-gray-50">
               <div className="space-y-2 mb-4">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Subtotal</span>
+                  <span className="text-gray-600">Subtotal</span>
                   <span>${subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Tax (8%)</span>
+                  <span className="text-gray-600">Tax (8%)</span>
                   <span>${tax.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between items-center pt-2 border-t border-border">
+                <div className="flex justify-between items-center pt-2 border-t border-gray-200">
                   <span className="font-semibold">Total</span>
                   <span className="text-xl font-bold">${total.toFixed(2)}</span>
                 </div>
@@ -235,7 +204,6 @@ export default function PosPage() {
                     <Button
                       className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center gap-2"
                       disabled={cart.length === 0}
-                      onClick={processPayment}
                     >
                       <Banknote className="h-5 w-5" />
                       <span>Pay with Cash</span>
@@ -245,7 +213,6 @@ export default function PosPage() {
                     <Button
                       className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center gap-2"
                       disabled={cart.length === 0}
-                      onClick={processPayment}
                     >
                       <CreditCard className="h-5 w-5" />
                       <span>Pay with Card</span>

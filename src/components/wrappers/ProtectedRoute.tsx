@@ -1,6 +1,6 @@
-import { useUser } from "@clerk/clerk-react";
+import { useUser, useAuth } from "@clerk/clerk-react";
 import { useQuery } from "convex/react";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { Navigate } from "react-router";
 import { api } from "../../../convex/_generated/api";
 
@@ -21,6 +21,7 @@ function LoadingSpinner() {
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { user, isLoaded: isUserLoaded } = useUser();
+  const { isSignedIn } = useAuth();
 
   // Query current user from Convex
   const userData = useQuery(api.users.getCurrentUser);
@@ -32,18 +33,13 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   }
 
   // Step 2: Check if user is authenticated
-  if (!user) {
+  if (!isSignedIn) {
     return <Navigate to="/" replace />;
   }
 
   // Step 3: Wait for user data to load
   if (userData === undefined) {
     return <LoadingSpinner />;
-  }
-
-  // Step 4: Check if user exists in database
-  if (userData === null) {
-    return <Navigate to="/" replace />;
   }
 
   // All checks passed, render protected content

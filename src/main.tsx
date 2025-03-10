@@ -1,12 +1,12 @@
-import { ClerkProvider, useAuth } from "@clerk/clerk-react";
 import { ConvexReactClient } from "convex/react";
-import { ConvexProviderWithClerk } from "convex/react-clerk";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { TempoDevtools } from "tempo-devtools";
 import App from "./App.tsx";
 import "./index.css";
+import { ClerkProviderWithJWT } from "./components/ClerkProviderWithJWT";
+import { ThemeProvider } from "@/components/ui/theme-provider";
 
 const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string);
 
@@ -23,12 +23,12 @@ if (!PUBLISHABLE_KEY) {
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
-      <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
+    <ThemeProvider defaultTheme="light">
+      <ClerkProviderWithJWT publishableKey={PUBLISHABLE_KEY} convex={convex}>
         <BrowserRouter basename={basename}>
           <App />
         </BrowserRouter>
-      </ConvexProviderWithClerk>
-    </ClerkProvider>
+      </ClerkProviderWithJWT>
+    </ThemeProvider>
   </React.StrictMode>,
 );

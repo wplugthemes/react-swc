@@ -1,11 +1,6 @@
 import { Footer } from "@/components/footer";
 import { Navbar } from "@/components/navbar";
 import { Button } from "@/components/ui/button";
-import { SignInButton, useUser } from "@clerk/clerk-react";
-import { useMutation } from "convex/react";
-import { useEffect } from "react";
-import { useNavigate } from "react-router";
-import { api } from "../../convex/_generated/api";
 import {
   BarChart3,
   ShoppingCart,
@@ -69,17 +64,7 @@ const BENEFITS = [
   },
 ] as const;
 
-function App() {
-  const { user, isLoaded: isUserLoaded } = useUser();
-  const storeUser = useMutation(api.users.store);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (user) {
-      storeUser();
-    }
-  }, [user, storeUser]);
-
+export default function MockHome() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
@@ -97,35 +82,17 @@ function App() {
                   sales, inventory, and customers all in one place.
                 </p>
 
-                {!isUserLoaded ? (
-                  <div className="flex gap-4 pt-4">
-                    <div className="px-8 py-3 w-[145px] h-[38px] rounded-lg bg-gray-200 animate-pulse"></div>
-                  </div>
-                ) : (
-                  <div className="flex flex-wrap gap-4 pt-4">
-                    {!user ? (
-                      <SignInButton mode="modal">
-                        <Button
-                          size="lg"
-                          className="bg-indigo-600 hover:bg-indigo-700 text-white"
-                        >
-                          Get Started
-                        </Button>
-                      </SignInButton>
-                    ) : (
-                      <Button
-                        size="lg"
-                        className="bg-indigo-600 hover:bg-indigo-700 text-white"
-                        onClick={() => navigate("/dashboard")}
-                      >
-                        Go to Dashboard
-                      </Button>
-                    )}
-                    <Button variant="outline" size="lg">
-                      Watch Demo
-                    </Button>
-                  </div>
-                )}
+                <div className="flex flex-wrap gap-4 pt-4">
+                  <Button
+                    size="lg"
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                  >
+                    Get Started
+                  </Button>
+                  <Button variant="outline" size="lg">
+                    Watch Demo
+                  </Button>
+                </div>
               </div>
               <div className="md:w-1/2">
                 <div className="relative rounded-xl overflow-hidden shadow-2xl">
@@ -213,35 +180,21 @@ function App() {
               operations and boost growth.
             </p>
 
-            {isUserLoaded && (
-              <div className="flex flex-wrap justify-center gap-4">
-                {!user ? (
-                  <SignInButton mode="modal">
-                    <Button
-                      size="lg"
-                      className="bg-white text-indigo-600 hover:bg-gray-100"
-                    >
-                      Start Free Trial
-                    </Button>
-                  </SignInButton>
-                ) : (
-                  <Button
-                    size="lg"
-                    className="bg-white text-indigo-600 hover:bg-gray-100"
-                    onClick={() => navigate("/dashboard")}
-                  >
-                    Go to Dashboard
-                  </Button>
-                )}
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="border-white text-white hover:bg-indigo-700"
-                >
-                  Schedule Demo
-                </Button>
-              </div>
-            )}
+            <div className="flex flex-wrap justify-center gap-4">
+              <Button
+                size="lg"
+                className="bg-white text-indigo-600 hover:bg-gray-100"
+              >
+                Start Free Trial
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="border-white text-white hover:bg-indigo-700"
+              >
+                Schedule Demo
+              </Button>
+            </div>
           </div>
         </div>
       </main>
@@ -249,5 +202,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

@@ -5,6 +5,7 @@ import Dashboard from "./pages/dashboard";
 import Home from "./pages/home";
 import { LoadingSpinner } from "./components/loading-spinner";
 import ProtectedRoute from "./components/wrappers/ProtectedRoute";
+import { Toaster } from "@/components/ui/toaster";
 
 // Lazy load POS page
 const PosPage = lazy(() => import("./pages/pos"));
@@ -37,6 +38,7 @@ function App() {
           )}
         </Routes>
         {import.meta.env.VITE_TEMPO === "true" && useRoutes(routes)}
+        <Toaster />
       </>
     </Suspense>
   );
